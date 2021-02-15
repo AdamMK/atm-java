@@ -20,12 +20,29 @@ public class User {
         //hashing pin with MD5
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
+            this.pinHash = md.digest(pin.getBytes());
         } catch (NoSuchAlgorithmException e) {
             System.err.println("error, caught NoSuchAlgorithmException");
             e.printStackTrace();
             System.exit(1);
         }
 
+        //UUID
+        this.uuid = theBank.getNewUserUUID();
+
+        //create empty list of accounts
+        this.accounts = new ArrayList<>();
+
+        System.out.printf("New user %s, %s with ID %s created.\n", lastName, firstName, this.uuid);
+
+    }
+
+    public void addAccount(Account anAcct) {
+        this.accounts.add(anAcct);
+    }
+
+    public String getUUID(){
+        return this.uuid;
     }
 
 }
