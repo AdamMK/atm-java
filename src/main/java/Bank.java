@@ -7,6 +7,13 @@ public class Bank {
     private ArrayList<User> users;
     private ArrayList<Account> accounts;
 
+    //bank object with the empty lists of users and accounts
+    public Bank(String name) {
+        this.name = name;
+        this.users = new ArrayList<>();
+        this.accounts = new ArrayList<>();
+    }
+
 
     public String getNewUserUUID(){
 
@@ -83,5 +90,23 @@ public class Bank {
     }
 
     //login for bank
+
+    public User userLogin(String userID, String pin) {
+
+        //find user in the list
+        for(User u: this.users){
+
+            //if user Id found
+            if(u.getUUID().compareTo(userID) == 0 && u.validatePin(pin)) {
+                return u;
+            }
+        }
+        //if user not found or wrong pin
+        return null;
+    }
+
+    public String getName(){
+        return this.name;
+    }
     
 }
