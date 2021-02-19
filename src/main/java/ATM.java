@@ -1,3 +1,7 @@
+import java.awt.*;
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ATM {
@@ -44,13 +48,16 @@ public class ATM {
         String pin;
         User authUser;
 
+        Console console = System.console();
+
         //prompt user for ID/Pin until correct
         do {
             System.out.printf("\n\nWelcome to %s\n\n", theBank.getName());
             System.out.print("Enter user ID: ");
             userID = sc.nextLine();
-            System.out.printf("Enter pin: ");
-            pin = sc.nextLine();
+            pin = new String(console.readPassword("Enter pin: "));
+            //System.out.printf("Enter pin: ");
+            //pin = sc.nextLine();
 
             //try to get user object corresponding to Id/pin
             authUser = theBank.userLogin(userID,pin);
@@ -104,10 +111,10 @@ public class ATM {
                 break;
             case 5:
                 sc.nextLine();
-                break;
+                System.exit(0);
         }
 
-        //redispaly manu unless user quits
+        //redisplay menu unless user quits
         //not wrapping all thing in loop but recursively call this function
         if(choice != 5) {
             ATM.printUserMenu(theUser, sc);
@@ -136,8 +143,6 @@ public class ATM {
         //print transaction
         theUser.printAcctTransactionHistory(theAcct);
     }
-
-
 
     public static void transferFunds(User theUser, Scanner sc) {
 
@@ -185,7 +190,7 @@ public class ATM {
         ));
 
         theUser.addAcctTransaction(toAcct, amount, String.format(
-            "Transfer to account %s", theUser.getAcctUUID(fromAcct)
+            "Transfer from account %s", theUser.getAcctUUID(fromAcct)
         ));
     }
 
@@ -196,8 +201,6 @@ public class ATM {
         double amount;
         double acctBal;
         String memo;
-
-
 
         //widthdraw from
         do {
@@ -210,11 +213,10 @@ public class ATM {
         } while (fromAcct < 0 || fromAcct >= theUser.numAccount());
         acctBal = theUser.getAcctBalance(fromAcct);
 
-        //how to break form this if amout is 0
-//        if(acctBal == 0) {
-//            System.out.println("You don't have any money in this account");
-//        }
-
+        if(acctBal == 0) {
+            System.out.println("You don't have any money in this account");
+            return;
+        }
 
         //get the amount to widthdraw
 
